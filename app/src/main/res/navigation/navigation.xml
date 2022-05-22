@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@+id/nav_game_play">
+
+    <fragment
+        android:id="@+id/nav_game_play"
+        android:name="com.football3match.master.ui.GamePlayFragment"
+        android:label="@string/title_game_play"
+        tools:layout="@layout/game_play_fragment"/>
+
+</navigation>
