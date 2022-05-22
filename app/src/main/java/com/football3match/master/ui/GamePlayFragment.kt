@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.view.animation.TranslateAnimation
 import android.widget.GridLayout
 import android.widget.ImageButton
@@ -15,7 +13,11 @@ import android.widget.RelativeLayout
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.football3match.master.R
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+
 
 
 class GamePlayFragment : Fragment() {
@@ -26,20 +28,18 @@ class GamePlayFragment : Fragment() {
         const val ROWS = 7
         const val COLUMNS = 6
 
-        const val ITEM_TYPE_REFEREE = 1
+        val items = arrayOf(
+            R.drawable.refree,
+            R.drawable.group_1,
+            R.drawable.group_2,
+            R.drawable.cards,
+            R.drawable.trophy,
+            R.drawable.foot_ball,
+            R.drawable.stop_watch
+        )
     }
 
     private lateinit var viewModel: GamePlayViewModel
-
-    val items = arrayOf(
-        R.drawable.refree,
-        R.drawable.group_1,
-        R.drawable.group_2,
-        R.drawable.cards,
-        R.drawable.trophy,
-        R.drawable.foot_ball,
-        R.drawable.stop_watch
-    )
 
     val ball = R.drawable.foot_ball
     val stopWatch = R.drawable.stop_watch
@@ -53,7 +53,8 @@ class GamePlayFragment : Fragment() {
 
     //each item params
     lateinit var itemParams: RelativeLayout.LayoutParams
-    lateinit var imageButton: ImageButton
+    lateinit var startPause: ImageButton
+    lateinit var sound: ImageButton
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -62,10 +63,16 @@ class GamePlayFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(GamePlayViewModel::class.java)
         val root = inflater.inflate(R.layout.game_play_fragment, container, false)
         boardView = root.findViewById(R.id.board)
-        imageButton = root.findViewById(R.id.imageButton)
-        imageButton.setOnClickListener {
-            viewModel.checkRow(boardView)
+        startPause = root.findViewById(R.id.start_pause)
+        sound = root.findViewById(R.id.sound)
+
+        startPause.setOnClickListener {
         }
+
+        sound.setOnClickListener {
+        }
+
+
         return root
     }
 
@@ -76,6 +83,16 @@ class GamePlayFragment : Fragment() {
         boardView.post {
             itemParams = RelativeLayout.LayoutParams(boardView.width/ COLUMNS,boardView.height/ ROWS)
             populate()
+
+            lifecycleScope.launch {
+                viewModel.checkBoard.collect {
+
+                    viewModel.checkRow(boardView)
+                    viewModel.checkColumn(boardView)
+                    val gaps = viewModel.brigDownPieces(boardView)
+                    viewModel.fillGaps(gaps, boardView)
+                }
+            }
         }
 
 
@@ -90,12 +107,17 @@ class GamePlayFragment : Fragment() {
             imageView.setImageResource(items[rand])
             imageView.tag = items[rand]
             board[i] = (items[rand])
+            imageView.layoutParams = itemParams
             imageView.setOnTouchListener( object: OnSwipeListener(requireContext()){
                 override fun swapTop(){
                     if(i < 6)
                         return
                     val img2 = boardView[i - COLUMNS] as ImageView
-                    swap(imageView, img2)
+                    val img1Animation = TranslateAnimation(0f, 0f, -1f*imageView.height, 0f)
+                    val img2Animation = TranslateAnimation(0f, 0f, imageView.height.toFloat(), 0f)
+                    img1Animation.duration = 300
+                    img2Animation.duration = 300
+                    viewModel.swap(imageView, img2, img1Animation, img2Animation)
                 }
 
                 override fun swapBottom() {
@@ -103,7 +125,12 @@ class GamePlayFragment : Fragment() {
                     if(i > 36)
                         return
                     val img2 = boardView[i + COLUMNS] as ImageView
-                    swap(imageView, img2)
+
+                    val img1Animation = TranslateAnimation(0f, 0f, imageView.height.toFloat(), 0f)
+                    val img2Animation = TranslateAnimation(0f, 0f, -1f*imageView.height, 0f)
+                    img1Animation.duration = 300
+                    img2Animation.duration = 300
+                    viewModel.swap(imageView, img2, img1Animation, img2Animation)
                 }
 
                 override fun swapLeft() {
@@ -112,7 +139,12 @@ class GamePlayFragment : Fragment() {
                     if(leftEdges.contains(i))
                         return
                     val img2 = boardView[i - 1] as ImageView
-                    swap(imageView, img2)
+
+                    val img1Animation = TranslateAnimation( -1f*imageView.width, 0f,0f, 0f)
+                    val img2Animation = TranslateAnimation(imageView.width.toFloat(), 0f, 0f, 0f, )
+                    img1Animation.duration = 300
+                    img2Animation.duration = 300
+                    viewModel.swap(imageView, img2, img1Animation, img2Animation)
                 }
 
                 override fun swapRight() {
@@ -121,38 +153,14 @@ class GamePlayFragment : Fragment() {
                     if(leftEdges.contains(i))
                         return
                     val img2 = boardView[i + 1] as ImageView
-                    swap(imageView, img2)
+                    val img1Animation = TranslateAnimation(imageView.width.toFloat(), 0f,0f, 0f)
+                    val img2Animation = TranslateAnimation(-1f*imageView.width, 0f,0f, 0f)
+                    img1Animation.duration = 300
+                    img2Animation.duration = 300
+                    viewModel.swap(imageView, img2, img1Animation, img2Animation)
                 }
             })
-            imageView.layoutParams = itemParams
             boardView.addView(imageView)
         }
     }
-    fun swap(img1: ImageView, img2: ImageView){
-        val tmp: Int = img2.tag as Int
-        img2.setImageResource(img1.tag as Int)
-        img2.tag = img1.tag
-        img1.setImageResource(tmp)
-        img1.tag = tmp
-
-        val upSlide: Animation = AnimationUtils.loadAnimation(
-            requireContext(),
-            R.anim.slide_up
-        )
-
-
-        val downSlide: Animation = AnimationUtils.loadAnimation(
-            requireContext(),
-            R.anim.slide_down
-        )
-
-        img1.startAnimation(upSlide)
-        img2.startAnimation(downSlide)
-
-//        val translate = TranslateAnimation(0f,0f,0f,0f)
-//        img1.startAnimation(translate)
-
-    }
-
-
 }
