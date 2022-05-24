@@ -1,4 +1,4 @@
-package com.football3match.master.ui
+package com.football3match.master.ui.gameplay
 
 import android.annotation.SuppressLint
 import android.media.MediaPlayer
@@ -19,7 +19,6 @@ import com.football3match.master.R
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.nio.InvalidMarkException
 
 
 class GamePlayFragment : Fragment() {
@@ -55,7 +54,7 @@ class GamePlayFragment : Fragment() {
 
     lateinit var boardView: GridLayout
     lateinit var goalView: GridLayout
-    val board = Array<Int>(ROWS* COLUMNS){
+    val board = Array<Int>(ROWS * COLUMNS){
         0
     }
 
@@ -140,7 +139,7 @@ class GamePlayFragment : Fragment() {
 
     @SuppressLint("ClickableViewAccessibility")
     fun populate(){
-        for(i in 0 until ROWS* COLUMNS){
+        for(i in 0 until ROWS * COLUMNS){
             val rand = (items.indices).random()
             val imageView = ImageView(requireContext())
             imageView.setImageResource(items[rand])
@@ -212,8 +211,8 @@ class GamePlayFragment : Fragment() {
             if(tmp % 2 == 0){
                 val y = (0 until ROWS).random()
                 val x = (0 until COLUMNS).random()
-                (boardView[x+(y*COLUMNS)] as ImageView).setImageResource(stopWatch)
-                (boardView[x+(y*COLUMNS)] as ImageView).tag = stopWatch
+                (boardView[x+(y* COLUMNS)] as ImageView).setImageResource(stopWatch)
+                (boardView[x+(y* COLUMNS)] as ImageView).tag = stopWatch
             }
         }
 

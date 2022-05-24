@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">Football Master</string>
     <string name="title_game_play">Football Master</string>
+    <string name="best_time">Best Time</string>
+    <string name="time">Time</string>
+    <string name="half">-Half</string>
+    <string name="pause">PAUSE</string>
+    <string name="goal">GOAL!</string>
+    <string name="time_is_up">TIME IS UP</string>
+    <string name="menu">Menu</string>
+    <string name="rematch">Rematch</string>
+    <string name="next_match">Next Match</string>
+    <string name="back">Back</string>
+    <string name="resume">Resume</string>
+
 </resources>

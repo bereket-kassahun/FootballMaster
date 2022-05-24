@@ -9,19 +9,30 @@
         <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/drawable/_x35__1_.xml" value="0.1305" />
         <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/drawable/_x39__1_.xml" value="0.1305" />
         <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/drawable/_x39__1__1.xml" value="0.1305" />
+        <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/drawable/a.xml" value="0.102" />
+        <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/drawable/border.xml" value="0.102" />
         <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/drawable/cards.xml" value="0.1305" />
+        <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/drawable/circle.xml" value="0.102" />
         <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/drawable/football_1.xml" value="0.1305" />
         <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/drawable/group_2.xml" value="0.1305" />
+        <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/drawable/ic_baseline_language_24.xml" value="0.1625" />
         <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/drawable/ic_baseline_pause_presentation_24.xml" value="0.11" />
         <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/drawable/ic_baseline_play_arrow_24.xml" value="0.1865" />
         <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/drawable/ic_baseline_volume_up_24.xml" value="0.1865" />
+        <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/drawable/ic_outline_language_24.xml" value="0.1625" />
         <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/drawable/left_glove.xml" value="0.1305" />
+        <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/drawable/like.xml" value="0.1625" />
         <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/drawable/refree.xml" value="0.1305" />
         <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/drawable/right_glove.xml" value="0.1305" />
         <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/drawable/stop_watch.xml" value="0.1865" />
         <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/drawable/tickets_1.xml" value="0.1305" />
+        <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/drawable/unknown.xml" value="0.102" />
         <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/layout/activity_main.xml" value="0.18854166666666666" />
+        <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/layout/fragment_goal.xml" value="0.25" />
+        <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/layout/fragment_time_is_up.xml" value="0.18854166666666666" />
         <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/layout/game_play_fragment.xml" value="0.2" />
+        <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/layout/main_menu_fragment.xml" value="0.22" />
+        <entry key="..\:/Users/bereket/AndroidStudioProjects/FootballMaster/app/src/main/res/layout/pause_fragment.xml" value="0.18854166666666666" />
       </map>
     </option>
   </component>

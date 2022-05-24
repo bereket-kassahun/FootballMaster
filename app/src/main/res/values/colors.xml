@@ -11,4 +11,5 @@
     <color name="transparent">#00363A3A</color>
     <color name="color_primary">#10664B</color>
     <color name="color_field_background">#02AE77</color>
+    <color name="color_secondary">#FEE101</color>
 </resources>
