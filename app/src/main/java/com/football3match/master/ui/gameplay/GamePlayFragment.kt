@@ -65,7 +65,6 @@ class GamePlayFragment : Fragment() {
     private lateinit var halfIndicator: TextView
 
 
-
     lateinit var boardView: GridLayout
     lateinit var goalView: GridLayout
     val board = Array<Int>(ROWS * COLUMNS){

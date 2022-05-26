@@ -59,7 +59,6 @@ class GoalFragment : Fragment() {
         time = root.findViewById(R.id.time_value)
 
         menu.setOnClickListener {
-            // Handle the back button event
             findNavController().popBackStack(R.id.nav_main_menu, false)
         }
 

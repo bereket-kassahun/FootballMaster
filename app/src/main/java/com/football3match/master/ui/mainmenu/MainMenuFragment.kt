@@ -132,12 +132,6 @@ class MainMenuFragment : Fragment() {
         // refresh your views here
         bestTime.setText(R.string.best_time)
         super.onConfigurationChanged(newConfig)
-        // Checks the active language
-//        if (newConfig.locale === Locale.ENGLISH) {
-//            Toast.makeText(requireContext(), "English", Toast.LENGTH_SHORT).show()
-//        } else {
-//            Toast.makeText(requireContext(), "RUSSIA", Toast.LENGTH_SHORT).show()
-//        }
     }
 
 
@@ -150,6 +144,4 @@ class MainMenuFragment : Fragment() {
         res.updateConfiguration(conf, dm)
         onConfigurationChanged(conf)
     }
-
-
 }
