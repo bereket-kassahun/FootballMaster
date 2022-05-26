@@ -5,6 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.activity.OnBackPressedCallback
+import androidx.navigation.fragment.findNavController
 import com.football3match.master.R
 
 // TODO: Rename parameter arguments, choose names that match
@@ -22,6 +25,8 @@ class TimeIsUpFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    lateinit var menu: Button
+    lateinit var rematch: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -35,9 +40,31 @@ class TimeIsUpFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_time_is_up, container, false)
+        val root = inflater.inflate(R.layout.fragment_time_is_up, container, false)
+        menu = root.findViewById(R.id.menu)
+        rematch = root.findViewById(R.id.rematch)
+        return root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        menu.setOnClickListener {
+            findNavController().popBackStack(R.id.nav_main_menu, false)
+        }
+
+        rematch.setOnClickListener {
+            findNavController().navigate(R.id.nav_game_play)
+        }
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true /* enabled by default */) {
+                override fun handleOnBackPressed() {
+                    // Handle the back button event
+                    findNavController().popBackStack(R.id.nav_main_menu, false)
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
     companion object {
         /**
          * Use this factory method to create a new instance of

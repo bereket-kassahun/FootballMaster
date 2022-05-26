@@ -18,21 +18,21 @@ class PreferenceManager(context: Context) {
     }
 
     fun getCurrentLang(): String{
-        return preference.getString(CURRENT_LANG, "eng") ?: "eng"
+        return preference.getString(CURRENT_LANG, "en") ?: "en"
     }
-    fun getBestTime(): String{
-        return preference.getString(BEST_TIME, "00:00") ?: "00:00"
+    fun getBestTime(): Int{
+        return preference.getInt(BEST_TIME, 20) ?: 0
     }
     fun getSoundEnabled(): Boolean{
-        return preference.getBoolean(SOUND_ENABLED, false) ?: false
+        return preference.getBoolean(SOUND_ENABLED, true)
     }
 
     fun setCurrentLang(lang: String){
         editor.putString(CURRENT_LANG, lang)
         editor.apply()
     }
-    fun setBestTime(time: String){
-        editor.putString(BEST_TIME, time)
+    fun setBestTime(time: Int){
+        editor.putInt(BEST_TIME, time)
         editor.apply()
     }
     fun setSoundEnabled(value: Boolean){

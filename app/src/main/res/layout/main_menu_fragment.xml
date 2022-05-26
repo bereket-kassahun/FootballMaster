@@ -28,27 +28,28 @@
         tools:layout_editor_absoluteX="65dp" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/sound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="5dp"
         android:background="@color/transparent"
         android:src="@drawable/ic_baseline_volume_up_24"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton3"
-        app:layout_constraintTop_toTopOf="@+id/imageButton3" />
+        app:layout_constraintEnd_toStartOf="@+id/language"
+        app:layout_constraintTop_toTopOf="@+id/language" />
 
     <ImageButton
-        android:id="@+id/imageButton3"
+        android:id="@+id/language"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="5dp"
-        android:background="@color/transparent"
+        android:background="@drawable/uk"
+        android:foregroundTintMode="@color/color_secondary"
         android:src="@drawable/ic_baseline_language_24"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton2"
-        app:layout_constraintTop_toTopOf="@+id/imageButton2" />
+        app:layout_constraintEnd_toStartOf="@+id/rate_us"
+        app:layout_constraintTop_toTopOf="@+id/rate_us" />
 
     <ImageButton
-        android:id="@+id/imageButton2"
+        android:id="@+id/rate_us"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="5dp"
@@ -74,23 +75,25 @@
             android:id="@+id/best_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="10dp"
+            android:layout_toLeftOf="@id/time"
             android:fontFamily="@font/oxygen_bold"
-            android:textSize="35sp"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="40dp"
-            android:text="@string/best_time"/>
+            android:text="@string/best_time"
+            android:textColor="@color/white"
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:fontFamily="@font/oxygen_bold"
-            android:textSize="35sp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
             android:layout_centerVertical="true"
-            android:layout_marginStart="20dp"
-            android:layout_toRightOf="@id/best_time" />
+            android:layout_alignParentEnd="true"
+            android:fontFamily="@font/oxygen_bold"
+            android:textColor="@color/white"
+            android:textSize="30sp" />
     </RelativeLayout>
 
     <androidx.constraintlayout.widget.Guideline

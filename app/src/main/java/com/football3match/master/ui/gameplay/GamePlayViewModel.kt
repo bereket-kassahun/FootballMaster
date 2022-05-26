@@ -5,6 +5,8 @@ import android.view.animation.TranslateAnimation
 import android.widget.GridLayout
 import android.widget.ImageView
 import androidx.core.view.get
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.football3match.master.ui.gameplay.GamePlayFragment.Companion.COLUMNS
@@ -22,18 +24,61 @@ import kotlinx.coroutines.launch
 
 class GamePlayViewModel : ViewModel() {
 
+    private val _time = MutableLiveData<Int>(0)
+    val time: LiveData<Int> = _time
 
+    fun incrementTime(){
+        _time.value = _time.value?.plus(1)
+    }
+
+    fun setTime(time: Int){
+        _time.value = time
+    }
+    fun timerCollected(){
+        val comp = _time.value?.minus(3) ?: 0
+        if(comp >= 0){
+            _time.value = _time.value?.minus(3)
+        }else{
+            _time.value = 0
+        }
+    }
+
+    fun resetTime(){
+        _time.value = 0
+    }
     private val _playMusic = MutableSharedFlow<Int>()
     val playMusic = _playMusic.asSharedFlow()
 
-    init {
-    }
 
     fun emitMusicType(type: Int) {
         viewModelScope.launch {
             _playMusic.emit(type)
         }
     }
+
+
+    val _boardInfo = MutableLiveData<ArrayList<Int>>(ArrayList<Int>(COLUMNS* ROWS))
+    val boardInfo: LiveData<ArrayList<Int>> = _boardInfo
+
+    val _goalInfo = MutableLiveData<ArrayList<Int>>(ArrayList<Int>(COLUMNS))
+    val goalInfo: LiveData<ArrayList<Int>> = _goalInfo
+
+    val paused = MutableLiveData<Boolean>(false)
+    fun saveState(board: GridLayout, goal: GridLayout){
+        _boardInfo.value?.clear()
+        _goalInfo.value?.clear()
+
+        for(i in 0 until ROWS * COLUMNS){
+            _boardInfo.value?.add(board[i].tag as Int)
+        }
+        for(x in 0 until COLUMNS){
+            _goalInfo.value?.add(goal[x].tag as Int)
+        }
+        paused.value = true
+
+    }
+
+
 
     val checkBoard = flow<Int> {
         while (true) {
@@ -44,6 +89,7 @@ class GamePlayViewModel : ViewModel() {
 
     // checks row and L shaped ones
     fun checkRow(gridLayout: GridLayout): Boolean {
+        var emitted = false
         var count = 0
         var verticalCountAbove = 0
         var verticalCountBelow = 0
@@ -68,10 +114,12 @@ class GamePlayViewModel : ViewModel() {
                         gridLayout[currentRowItems + i].tag = 0
 
                         val ret = checkIfAdjecentTimerExists(gridLayout, i, y)
-                        if(ret.first){
+                        if(ret.first && !emitted){
+                            emitted = true
                             gridLayout[(ret.second.second * COLUMNS) + ret.second.first].tag = 0
                             (gridLayout[(ret.second.second * COLUMNS) + ret.second.first] as ImageView).setImageResource(0)
                             emitMusicType(3)
+                            timerCollected()
                         }
                         //start of untested code
                         for (w in y + 1 until ROWS) {
@@ -97,10 +145,12 @@ class GamePlayViewModel : ViewModel() {
                                 gridLayout[i + (j * COLUMNS)].tag = 0
 
                                 val ret = checkIfAdjecentTimerExists(gridLayout, i, j)
-                                if(ret.first){
+                                if(ret.first && !emitted){
+                                    emitted = true
                                     gridLayout[(ret.second.second * COLUMNS) + ret.second.first].tag = 0
                                     (gridLayout[(ret.second.second * COLUMNS) + ret.second.first] as ImageView).setImageResource(0)
                                     emitMusicType(3)
+                                    timerCollected()
                                 }
                             }
                         }
@@ -139,6 +189,7 @@ class GamePlayViewModel : ViewModel() {
 
     //checks column
     fun checkColumn(gridLayout: GridLayout): Boolean {
+        var emitted = false
         var currentDrawable = 0
         var count = 0
         var ret = false
@@ -157,10 +208,12 @@ class GamePlayViewModel : ViewModel() {
                         (gridLayout[(i * COLUMNS) + x] as ImageView).setImageResource(0)
 
                         val ret = checkIfAdjecentTimerExists(gridLayout, x, i)
-                        if(ret.first){
+                        if(ret.first && !emitted){
+                            emitted = true
                             gridLayout[(ret.second.second * COLUMNS) + ret.second.first].tag = 0
                             (gridLayout[(ret.second.second * COLUMNS) + ret.second.first] as ImageView).setImageResource(0)
                             emitMusicType(3)
+                            timerCollected()
                         }
                     }
                     emitMusicType(2)
@@ -221,7 +274,7 @@ class GamePlayViewModel : ViewModel() {
         return gaps
     }
 
-    fun fillGaps(gaps: Array<Int>, gridLayout: GridLayout) {
+    fun fillGaps(gaps: Array<Int>, gridLayout: GridLayout, goal: GridLayout) {
         val itemHeight = (gridLayout[0] as ImageView).height
         for (x in 0 until COLUMNS) {
             for (y in 0 until gaps[x]) {
@@ -232,12 +285,18 @@ class GamePlayViewModel : ViewModel() {
                 (gridLayout[y * COLUMNS + x] as ImageView).tag = items[rand]
                 (gridLayout[y * COLUMNS + x] as ImageView).startAnimation(animation)
                 //adding stopwatch if it doesn't exist
-                if ((0..6).random() == 0 && !checkTimerExists(gridLayout)) {
+                if ((0..25).random() == 9 && !checkTimerExists(gridLayout) && paused.value == false) {
                     (gridLayout[y * COLUMNS + x] as ImageView).setImageResource(stopWatch)
                     (gridLayout[y * COLUMNS + x] as ImageView).tag = stopWatch
                     (gridLayout[y * COLUMNS + x] as ImageView).startAnimation(animation)
                 }
             }
+        }
+
+        val ballLocation = lastLineBallLocation(gridLayout)
+        val currentPos = currentGlovePosition(goal)
+        if(ballLocation != -1 && ballLocation != currentPos && ballLocation != currentPos+1){
+            emitMusicType(1)
         }
 
     }
@@ -276,7 +335,8 @@ class GamePlayViewModel : ViewModel() {
     }
 
 
-    fun moveGloves(gridLayout: GridLayout, goal: GridLayout){
+
+    fun moveGloves(gridLayout: GridLayout, board: GridLayout){
         val canMoveLeft = (gridLayout[0] as ImageView).tag == 0
         val canMoveRight = (gridLayout[5] as ImageView).tag == 0
         var currentPos = 0
@@ -309,16 +369,23 @@ class GamePlayViewModel : ViewModel() {
         (gridLayout[currentPos+1] as ImageView).tag = rightGlove
 
         val animation = if(tmp > currentPos){
-            TranslateAnimation(goal.width/ COLUMNS.toFloat(), 0f, 0f,0f)
+            //to the left
+            TranslateAnimation(gridLayout.width/ COLUMNS.toFloat(), 0f, 0f,0f)
+        }else if (currentPos > tmp){
+            //to the right
+            TranslateAnimation( -gridLayout.width/ COLUMNS.toFloat(),0f, 0f,0f)
         }else{
-            TranslateAnimation( 0f,goal.width/ COLUMNS.toFloat(), 0f,0f)
+            TranslateAnimation(0f, 0f, 0f,0f)
         }
+
         animation.duration = 400
         (gridLayout[currentPos] as ImageView).startAnimation(animation)
+        (gridLayout[currentPos+1] as ImageView).startAnimation(animation)
 
-        if(lastLineBallLocation(goal) == currentPos){
-            emitMusicType(1)
-        }
+//        val ballLocation = lastLineBallLocation(board)
+//        if(ballLocation != -1 && ballLocation != currentPos && ballLocation != currentPos+1){
+//            emitMusicType(1)
+//        }
 
     }
 
@@ -330,4 +397,15 @@ class GamePlayViewModel : ViewModel() {
         }
         return -1
     }
+
+    fun currentGlovePosition(goal: GridLayout): Int{
+        for(i in 0 until COLUMNS){
+            if((goal[i] as ImageView).tag == leftGlove){
+                return i
+            }
+        }
+        return -1
+    }
+
+
 }

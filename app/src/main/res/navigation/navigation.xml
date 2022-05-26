@@ -3,12 +3,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@+id/nav_game_play">
+    app:startDestination="@+id/nav_main_menu">
 
     <fragment
         android:id="@+id/nav_game_play"
-        android:name="com.football3match.master.ui.GamePlayFragment"
+        android:name="com.football3match.master.ui.gameplay.GamePlayFragment"
         android:label="@string/title_game_play"
         tools:layout="@layout/game_play_fragment"/>
+
+    <fragment
+        android:id="@+id/nav_gaol"
+        android:name="com.football3match.master.ui.goal.GoalFragment"
+        android:label="@string/title_game_play"
+        tools:layout="@layout/fragment_goal"/>
+
+    <fragment
+        android:id="@+id/nav_main_menu"
+        android:name="com.football3match.master.ui.mainmenu.MainMenuFragment"
+        android:label="@string/title_game_play"
+        tools:layout="@layout/main_menu_fragment"/>
+
+    <fragment
+        android:id="@+id/nav_pause"
+        android:name="com.football3match.master.ui.pause.PauseFragment"
+        android:label="@string/title_game_play"
+        tools:layout="@layout/pause_fragment"/>
+
+    <fragment
+        android:id="@+id/nav_time_is_up"
+        android:name="com.football3match.master.ui.timeIsUp.TimeIsUpFragment"
+        android:label="@string/title_game_play"
+        tools:layout="@layout/fragment_time_is_up"/>
 
 </navigation>
